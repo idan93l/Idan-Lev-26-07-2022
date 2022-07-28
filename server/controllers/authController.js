@@ -1,11 +1,13 @@
+const UserModel = require("../models/User")
+
 const register = async (req, res) => {
-  try {
-    // const usersData = await UserModel.find();
-    // res.status(200).send(usersData);
-    res.send("hello from auth");
-  } catch (err) {
-    res.status(404).send({ message: err.message });
-  }
+  const user = await new UserModel({
+    username: "john",
+    email: "john@gmail.com",
+    password: "123456"
+  })
+  await user.save();
+  res.send(user.username + "registered")
 }
 
 module.exports = {register}

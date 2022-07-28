@@ -1,4 +1,4 @@
-import "./TopBar.css";
+import "./Topbar.css";
 import { Search, Home, Chat } from "@mui/icons-material";
 import profilePicture from "../../assests/profile_pictures/profile_picture_1.jpeg";
 

@@ -1,13 +1,52 @@
-const UserModel = require("../models/User")
+const UserModel = require("../models/User");
+const bcrypt = require("bcrypt");
 
 const register = async (req, res) => {
-  const user = await new UserModel({
-    username: "john",
-    email: "john@gmail.com",
-    password: "123456"
-  })
-  await user.save();
-  res.send(user.username + "registered")
-}
+  try {
+    const { username, email, password } = req.body;
 
-module.exports = {register}
+    // generate new password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    // create new user
+    const newUser = await new UserModel({
+      username: username,
+      email: email,
+      password: hashedPassword,
+    });
+
+    // save user and respond
+    const user = await newUser.save();
+    res.status(200).json(user);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const login = async (req, res) => {
+  try {
+    const { username, email, password } = req.body;
+
+    // generate new password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    // create new user
+    const newUser = await new UserModel({
+      username: username,
+      email: email,
+      password: hashedPassword,
+    });
+
+    // save user and respond
+    const user = await newUser.save();
+    res.status(200).json(user);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+
+
+module.exports = { register, login };

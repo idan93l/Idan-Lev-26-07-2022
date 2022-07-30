@@ -1,12 +1,15 @@
-import "./Topbar.css";
 import { Search, Home, Chat } from "@mui/icons-material";
 import profilePicture from "../../assests/profile_pictures/profile_picture_1.jpeg";
+import { Link } from "react-router-dom";
+import "./Topbar.css";
 
 export default function Topbar() {
   return (
     <div className="topbarContainer">
       <div className="topbarLeft">
-        <span className="logo">Social-Era</span>
+        <Link to="/" style={{ textDecoration: "none" }}>
+          <span className="logo">Social-Era</span>
+        </Link>
         <div className="searchbar">
           <Search className="searchIcon" />
           <input placeholder="Search for friends" className="searchInput" />

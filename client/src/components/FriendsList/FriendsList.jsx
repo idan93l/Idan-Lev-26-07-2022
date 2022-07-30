@@ -6,7 +6,7 @@ import profileImage4 from "../../assests/profile_pictures/profile_picture_5.jpeg
 import profileImage5 from "../../assests/profile_pictures/profile_picture_6.jpeg";
 import profileImage6 from "../../assests/profile_pictures/profile_picture_8.jpeg";
 
-function FriendsList() {
+function FriendsList({user}) {
   return (
     <div className="friendsListContainer">
       <h4 className="title"> - Friends - </h4>

@@ -1,7 +1,7 @@
 .topbarContainer {
   height: 50px;
   width: 100vw;
-  background-color: var(--navyBlue);
+  background-color: #1775ee;
   display: flex;
   justify-content: space-between;
   align-items: center;

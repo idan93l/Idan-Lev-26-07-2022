@@ -1,20 +1,35 @@
 import Topbar from "../../components/Topbar/Topbar";
-import profilePicture from "../../assests/profile_pictures/profile_picture_7.jpeg";
+import noAvatar from "../../assests/profile_pictures/noAvatar.png";
 import "./Profile.css";
 import FriendsList from "../../components/FriendsList/FriendsList";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { useParams } from "react-router-dom";
 
 export default function Profile() {
+  const [user, setUser] = useState({});
+  const username = useParams().username;
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const res = await axios.get(`/users?username=${username}`);
+      setUser(res.data);
+    };
+    fetchUser();
+  },[username]);
+
   return (
     <>
       <Topbar />
       <div className="profile">
         <div className="innerProfileContainer">
-          <img className="profileUserImg" src={profilePicture} alt="" />
+          <img className="profileUserImg" src={user.profilePicture || noAvatar} alt="" />
           <div className="profileInfo">
-            <h4 className="profileInfoName">Safak Kocaoglu</h4>
+            <h4 className="profileInfoName">{user.username}</h4>
+            <h4 className="profileInfoEmail">{user.email}</h4>
           </div>
         </div>
-        <FriendsList />
+        <FriendsList user={user}/>
       </div>
     </>
   );

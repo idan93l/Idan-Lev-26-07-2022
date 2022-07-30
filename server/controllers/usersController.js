@@ -11,23 +11,18 @@ const UserModel = require("../models/User");
 // };
 
 const getUser = async (req, res) => {
+  const {userId ,username} = req.query;
   try {
-    const user = await UserModel.findById(req.params.id);
+    // const user = await UserModel.findById(req.params.id);
+    const user = userId
+    ? await UserModel.findById(userId)
+    : await UserModel.findOne({ username: username });
     const { password, updatedAt, ...other } = user._doc;
     res.status(200).json(other);
   } catch (err) {
     res.status(404).send({ message: err.message });
   }
 };
-
-// const addUser = async (req, res) => {
-//   try {
-//     const usersData = await UserModel.find();
-//     res.status(200).send(usersData);
-//   } catch (err) {
-//     res.status(404).send({ message: err.message });
-//   }
-// };
 
 const updateUser = async (req, res) => {
   const { id } = req.params;

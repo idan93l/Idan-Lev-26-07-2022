@@ -2,7 +2,7 @@ const express = require('express');
 const router = new express.Router();
 const { getUser, updateUser, deleteUser, addFriend, unfriend } = require('../controllers/usersController.js')
 
-router.get("/:id", getUser);
+router.get("/", getUser);
 
 router.put("/:id", updateUser);
 

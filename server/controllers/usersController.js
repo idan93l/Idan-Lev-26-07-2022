@@ -1,15 +1,5 @@
 const UserModel = require("../models/User");
 
-// const getUsers = async (req, res) => {
-//   try {
-//     const usersData = await UserModel.find();
-//     res.status(200).send(usersData);
-//     res.send("hello from users");
-//   } catch (err) {
-//     res.status(404).send({ message: err.message });
-//   }
-// };
-
 const getUser = async (req, res) => {
   const { userId, username } = req.query;
   try {
@@ -63,49 +53,49 @@ const deleteUser = async (req, res) => {
   }
 };
 
-const addFriend = async (req, res) => {
+const follow = async (req, res) => {
   const { userId } = req.body;
   const { id } = req.params;
   if (userId !== id) {
     try {
       const user = await UserModel.findById(id);
       const currentUser = await UserModel.findById(userId);
-      if (!user.friends.includes(userId)) {
-        await user.updateOne({ $push: { friends: userId } });
-        await currentUser.updateOne({ $push: { friends: id } });
-        res.status(200).json(`${userId} has been added to your friends list`);
+      if (!user.followers.includes(userId)) {
+        await user.updateOne({ $push: { followers: userId } });
+        await currentUser.updateOne({ $push: { followings: id } });
+        res.status(200).json(`${userId} has been added to your followers`);
       } else {
-        res.status(403).json(`you and ${userId} are already friends`);
+        res.status(403).json(`you already follow ${userId}`);
       }
     } catch (err) {
       res.status(500).json(err);
     }
   } else {
-    res.status(403).json("you cant add yourself to your friends list");
+    res.status(403).json("you can't follow yourself");
   }
 };
 
-const unfriend = async (req, res) => {
+const unfollow = async (req, res) => {
   const { userId } = req.body;
   const { id } = req.params;
   if (userId !== id) {
     try {
       const user = await UserModel.findById(id);
       const currentUser = await UserModel.findById(userId);
-      if (user.friends.includes(userId)) {
-        await user.updateOne({ $pull: { friends: userId } });
-        await currentUser.updateOne({ $pull: { friends: id } });
+      if (user.followers.includes(userId)) {
+        await user.updateOne({ $pull: { followers: userId } });
+        await currentUser.updateOne({ $pull: { followings: id } });
         res
           .status(200)
-          .json(`${userId} has been removed from your friends list`);
+          .json(`${userId} has been unfollowed`);
       } else {
-        res.status(403).json(`you and ${userId} are not friends`);
+        res.status(403).json(`you are not following ${userId}`);
       }
     } catch (err) {
       res.status(500).json(err);
     }
   } else {
-    res.status(403).json("you can't unfriend yourself");
+    res.status(403).json("you can't unfollow yourself");
   }
 };
 
@@ -113,7 +103,7 @@ const getFriends = async (req, res) => {
   try {
     const user = await UserModel.findById(req.params.userId);
     const friends = await Promise.all(
-      user.friends.map((friendId) => {
+      user.followings.map((friendId) => {
         return UserModel.findById(friendId);
       })
     );
@@ -122,7 +112,7 @@ const getFriends = async (req, res) => {
       const { _id, username, profilePicture } = friend;
       friendList.push({ _id, username, profilePicture });
     });
-    res.status(200).json(friendList);
+    res.status(200).json(friendList)
   } catch (err) {
     res.status(500).json(err);
   }
@@ -132,7 +122,7 @@ module.exports = {
   getUser,
   updateUser,
   deleteUser,
-  addFriend,
-  unfriend,
+  follow,
+  unfollow,
   getFriends,
 };

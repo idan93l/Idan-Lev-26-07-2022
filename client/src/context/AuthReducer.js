@@ -18,24 +18,24 @@ const AuthReducer = (state, action) => {
         isFetching: false,
         error: action.payload,
       };
-      case "ADD_FRIEND":
-        return {
-          ...state,
-          user: {
-            ...state.user,
-            friends: [...state.user.friends, action.payload],
-          },
-        };
-      case "UNFRIEND":
-        return {
-          ...state,
-          user: {
-            ...state.user,
-            friends: state.user.friends.filter(
-              (friend) => friend !== action.payload
-            ),
-          },
-        };
+    case "FOLLOW":
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          followings: [...state.user.followings, action.payload],
+        },
+      };
+    case "UNFOLLOW":
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          followings: state.user.followings.filter(
+            (following) => following !== action.payload
+          ),
+        },
+      };
     default:
       return state;
   }

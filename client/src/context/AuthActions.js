@@ -12,12 +12,12 @@ export const LoginFailure = (error) => ({
   payload: error
 });
 
-export const AddFriend = (userId) => ({
-  type: "ADD_FRIEND",
+export const Follow = (userId) => ({
+  type: "FOLLOW",
   payload: userId,
 });
 
-export const Unfriend = (userId) => ({
-  type: "UNFRIEND",
+export const Unfollow = (userId) => ({
+  type: "UNFOLLOW",
   payload: userId,
 });

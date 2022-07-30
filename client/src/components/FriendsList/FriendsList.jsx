@@ -9,17 +9,14 @@ import "./FriendsList.css";
 function FriendsList({ user }) {
   const [friends, setFriends] = useState([]);
   const { user: currentUser, dispatch } = useContext(AuthContext);
-  const [isFriend, setIsFriend] = useState(
-    currentUser.friends.includes(user?.id)
-  );
-
-  console.log(isFriend);
+  const [followed, setFollowed] = useState(currentUser.followings.includes(user?.id));
 
   useEffect(() => {
     const getFriends = async () => {
       try {
         const friendList = await axios.get(`/users/friends/${user._id}`);
         setFriends(friendList.data);
+        console.log(friends);
       } catch (err) {
         console.log(err);
       }
@@ -29,27 +26,29 @@ function FriendsList({ user }) {
 
   const handleClick = async () => {
     try {
-      if (!isFriend) {
-        await axios.put(`/users/${user._id}/unfriend`, {
+      if (followed) {
+        await axios.put(`/users/${user._id}/unfollow`, {
           userId: currentUser._id,
         });
-        dispatch({ type: "UNFRIEND", payload: user._id });
+        dispatch({ type: "UNFOLLOW", payload: user._id });
       } else {
-        await axios.put(`/users/${user._id}/addFriend`, {
+        await axios.put(`/users/${user._id}/follow`, {
           userId: currentUser._id,
         });
-        dispatch({ type: "ADD_FRIEND", payload: user._id });
+        dispatch({ type: "FOLLOW", payload: user._id });
       }
-      setIsFriend(!isFriend);
-    } catch (err) {}
+      setFollowed(!followed);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
     <div className="friendsListContainer">
       {user.username !== currentUser.username && (
         <button className="friendButton" onClick={handleClick}>
-          {isFriend ? "Unfriend" : "Add Friend"}
-          {isFriend ? <Remove /> : <Add />}
+          {followed ? "Unfollow" : "follow"}
+          {followed ? <Remove /> : <Add />}
         </button>
       )}
       <h4 className="title"> - Friends - </h4>

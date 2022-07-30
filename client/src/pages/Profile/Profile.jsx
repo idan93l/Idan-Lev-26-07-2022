@@ -1,10 +1,10 @@
 import Topbar from "../../components/Topbar/Topbar";
 import noAvatar from "../../assests/profile_pictures/noAvatar.png";
-import "./Profile.css";
 import FriendsList from "../../components/FriendsList/FriendsList";
-import { useState, useEffect } from "react";
 import axios from "axios";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import "./Profile.css";
 
 export default function Profile() {
   const [user, setUser] = useState({});

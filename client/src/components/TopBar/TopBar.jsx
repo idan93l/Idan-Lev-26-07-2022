@@ -1,9 +1,13 @@
 import { Search, Home, Chat } from "@mui/icons-material";
-import profilePicture from "../../assests/profile_pictures/profile_picture_1.jpeg";
+import noAvatar from "../../assests/profile_pictures/noAvatar.png";
 import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthContext"
 import "./Topbar.css";
 
 export default function Topbar() {
+  const {user} = useContext(AuthContext)
+
   return (
     <div className="topbarContainer">
       <div className="topbarLeft">
@@ -24,7 +28,9 @@ export default function Topbar() {
           <Chat />
           {/* <span className="topbarIconBadge">2</span> */}
         </div>
-        <img src={profilePicture} alt="" className="topbarImg" />
+        <Link to={`/profile/${user.username}`}>
+        <img src={user.profilePicture ? user.profilePicture : noAvatar} alt="" className="topbarImg" />
+        </Link>
       </div>
     </div>
   );

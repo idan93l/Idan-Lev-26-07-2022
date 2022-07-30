@@ -11,12 +11,12 @@ const UserModel = require("../models/User");
 // };
 
 const getUser = async (req, res) => {
-  const {userId ,username} = req.query;
+  const { userId, username } = req.query;
   try {
     // const user = await UserModel.findById(req.params.id);
     const user = userId
-    ? await UserModel.findById(userId)
-    : await UserModel.findOne({ username: username });
+      ? await UserModel.findById(userId)
+      : await UserModel.findOne({ username: username });
     const { password, updatedAt, ...other } = user._doc;
     res.status(200).json(other);
   } catch (err) {
@@ -95,7 +95,9 @@ const unfriend = async (req, res) => {
       if (user.friends.includes(userId)) {
         await user.updateOne({ $pull: { friends: userId } });
         await currentUser.updateOne({ $pull: { friends: id } });
-        res.status(200).json(`${userId} has been removed from your friends list`);
+        res
+          .status(200)
+          .json(`${userId} has been removed from your friends list`);
       } else {
         res.status(403).json(`you and ${userId} are not friends`);
       }
@@ -107,4 +109,30 @@ const unfriend = async (req, res) => {
   }
 };
 
-module.exports = { getUser, updateUser, deleteUser, addFriend, unfriend };
+const getFriends = async (req, res) => {
+  try {
+    const user = await UserModel.findById(req.params.userId);
+    const friends = await Promise.all(
+      user.friends.map((friendId) => {
+        return UserModel.findById(friendId);
+      })
+    );
+    let friendList = [];
+    friends.map((friend) => {
+      const { _id, username, profilePicture } = friend;
+      friendList.push({ _id, username, profilePicture });
+    });
+    res.status(200).json(friendList);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+module.exports = {
+  getUser,
+  updateUser,
+  deleteUser,
+  addFriend,
+  unfriend,
+  getFriends,
+};

@@ -3,7 +3,6 @@ import { loginCall } from "../../apiCalls";
 import { AuthContext } from "../../context/AuthContext";
 import { CircularProgress } from "@mui/material";
 import "./LogIn.css";
-import { height } from "@mui/system";
 
 export default function Login() {
   const email = useRef();
@@ -17,7 +16,7 @@ export default function Login() {
       dispatch
     );
   };
-  console.log(user);
+  // console.log(user);
   return (
     <div className="login">
       <div className="loginWrapper">
